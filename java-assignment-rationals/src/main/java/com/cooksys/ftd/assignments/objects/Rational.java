@@ -2,118 +2,112 @@ package com.cooksys.ftd.assignments.objects;
 
 //import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-interface IRational {
-
+public class Rational implements IRational {
+    
+	int numerator;
+	int denominator;
+	int result;
+	
 	/**
-	 * @return the numerator of this rational number
-	 */
-	int getNumerator();
+     * Constructor for rational values of the type:
+     * <p>
+     * `numerator / denominator`
+     * <p>
+     * No simplification of the numerator/denominator pair should occur in this method.
+     *
+     * @param numerator   the numerator of the rational value
+     * @param denominator the denominator of the rational value
+     * @throws IllegalArgumentException if the given denominator is 0
+     */
+    public Rational(int numerator, int denominator) throws IllegalArgumentException {
+        if(denominator == 0)
+        {
+        throw new IllegalArgumentException();	
+        }
+        this.numerator = numerator;
+        this.denominator = denominator;
+        this.result = numerator/denominator;
+        
+    }
 
-	/**
-	 * @return the denominator of this rational number
-	 */
-	int getDenominator();
+    /**
+     * @return the numerator of this rational number
+     */
+    @Override
+    public int getNumerator() {
+       return numerator;
+    }
 
-	/**
-	 * Specializable constructor to take advantage of shared code between
-	 * Rational and SimplifiedRational
-	 * <p>
-	 * Essentially, this method allows us to implement most of IRational methods
-	 * directly in the interface while preserving the underlying type
-	 *
-	 * @param numerator
-	 *            the numerator of the rational value to construct
-	 * @param denominator
-	 *            the denominator of the rational value to construct
-	 * @return the constructed rational value
-	 * @throws IllegalArgumentException
-	 *             if the given denominator is 0
-	 */
-	IRational construct(int numerator, int denominator) throws IllegalArgumentException;
+    /**
+     * @return the denominator of this rational number
+     */
+    @Override
+    public int getDenominator() {
+        return denominator;
+    }
 
-	/**
-	 * negation of rational values
-	 * <p>
-	 * definition: `negate(n / d) = -n / d`
-	 *
-	 * @return the negation of this
-	 */
-	default IRational negate() {
+    /**
+     * Specializable constructor to take advantage of shared code between Rational and SimplifiedRational
+     * <p>
+     * Essentially, this method allows us to implement most of IRational methods directly in the interface while
+     * preserving the underlying type
+     *
+     * @param numerator the numerator of the rational value to construct
+     * @param denominator the denominator of the rational value to construct
+     * @return the constructed rational value
+     * @throws IllegalArgumentException if the given denominator is 0
+     */
+    //polymorphism, abstraction study
+    @Override
+    public Rational construct(int numerator, int denominator) throws IllegalArgumentException {
 
-		return construct(getNumerator() * -1, getDenominator());
+      return new Rational(numerator, denominator);
+    }
 
-	}
+    /**
+     * @param obj the object to check this against for equality
+     * @return true if the given obj is a rational value and its
+     * numerator and denominator are equal to this rational value's numerator and denominator,
+     * false otherwise
+     */
+    @Override
+    public boolean equals(Object obj) {
+        boolean isEquals = false;
+    	//Rational constructValue = construct();
+    	try {
+    	Rational supplied = (Rational) obj; //type casting
+    	if (this.numerator == supplied.getNumerator() && this.denominator == supplied.getDenominator() 
+    			&& (result == supplied.getNumerator() / supplied.getDenominator()))
+    			{
+    			isEquals = true;
+    			}
+    	
+        }
+        catch (ClassCastException e) {
+        	throw new ClassCastException();
+        	
+        }
+        
+        return isEquals;
+    }
 
-	/**
-	 * inversion of rational values
-	 * <p>
-	 * definition: `invert(n / d) = d / n`
-	 *
-	 * @return the inversion of this
-	 * @throws IllegalStateException
-	 *             if the numerator of this rational value is 0
-	 */
-	default IRational invert() throws IllegalStateException {
-		return this;
-	}
-
-	/**
-	 * addition of rational values
-	 * <p>
-	 * definition: `(n1 / d1) + (n2 / d2) = ((n1 * d2) + (n2 * d1)) / (d1 * d2)`
-	 *
-	 * @param that
-	 *            the value to add to this
-	 * @return the sum of this and that
-	 * @throws IllegalArgumentException
-	 *             if that is null
-	 */
-	default IRational add(IRational that) throws IllegalArgumentException {
-		return this;
-	}
-
-	/**
-	 * subtraction of rational values
-	 * <p>
-	 * definition: `(n1 / d1) - (n2 / d2) = ((n1 * d2) - (n2 * d1)) / (d1 * d2)`
-	 *
-	 * @param that
-	 *            the value to subtract from this
-	 * @return the difference between this and that
-	 * @throws IllegalArgumentException
-	 *             if that is null
-	 */
-	default IRational sub(IRational that) throws IllegalArgumentException {
-		return this;
-	}
-
-	/**
-	 * multiplication of rational values
-	 * <p>
-	 * definition: `(n1 / d1) * (n2 / d2) = (n1 * n2) / (d1 * d2)`
-	 *
-	 * @param that
-	 *            the value to multiply this by
-	 * @return the product of this and that
-	 * @throws IllegalArgumentException
-	 *             if that is null
-	 */
-	default IRational mul(IRational that) throws IllegalArgumentException {
-		return this;
-	}
-
-	/**
-	 * division of rational values
-	 * <p>
-	 * definition: `(n1 / d1) / (n2 / d2) = (n1 * d2) / (d1 * n2)`
-	 *
-	 * @param that
-	 *            the value to divide this by
-	 * @return the ratio of this to that
-	 * @throws IllegalArgumentException
-	 *             if that is null or if the numerator of that is 0
-	 */
-	default IRational div(IRational that) throws IllegalArgumentException {
-		return this;
-	}
+    /**
+     * If this is positive, the string should be of the form `numerator/denominator`
+     * <p>
+     * If this is negative, the string should be of the form `-numerator/denominator`
+     *
+     * @return a string representation of this rational value
+     */
+    @Override
+    public String toString() {
+        
+    	if (result > 0)
+        {
+        	return String.valueOf(numerator)+ "/" + String.valueOf(denominator);
+        }
+    	else {
+    		return "-"+ String.valueOf(numerator)+ "/" + String.valueOf(denominator);
+    	}
+        
+    }
 }
